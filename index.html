@@ -1,46 +1,510 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Portfolio - Your Name</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pietro Saggionetto — Mechanical Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #ffffff;
+    --paper: #f4f3ef;
+    --ink: #131313;
+    --muted: #707070;
+    --soft: #b8b6b0;
+    --rule: #e5e3dd;
+    --accent: #7a2a1e; /* muted oxblood */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 15.5px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  /* Top bar — fixed bordered header */
+  .topbar {
+    position: sticky; top: 0; z-index: 10;
+    background: var(--bg);
+    border-bottom: 1px solid var(--rule);
+    padding: 14px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: .04em;
+  }
+  .topbar .mark { display: flex; gap: 14px; align-items: center; }
+  .topbar .mark .sigil {
+    display: inline-block;
+    width: 10px; height: 10px;
+    background: var(--accent);
+  }
+  .topbar nav { display: flex; gap: 28px; }
+  .topbar nav a { color: var(--muted); }
+  .topbar nav a:hover { color: var(--ink); }
+
+  /* Grid container */
+  .grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 48px;
+    padding: 56px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .row-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-top: 4px;
+  }
+  .row-label::before {
+    content: ""; display: block;
+    width: 24px; height: 1px;
+    background: var(--accent);
+    margin-bottom: 14px;
+  }
+
+  /* Hero */
+  .hero h1 {
+    font-size: clamp(36px, 5.2vw, 64px);
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    line-height: 1.04;
+    margin-bottom: 32px;
+  }
+  .hero h1 strong { font-weight: 500; }
+  .hero h1 .accent { color: var(--accent); font-weight: 400; }
+  .hero h1 .accent-em {
+    font-style: normal;
+    color: var(--muted);
+    font-weight: 300;
+  }
+  .hero-cta {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid var(--rule);
+    display: flex; gap: 14px 24px; flex-wrap: wrap; align-items: center;
+  }
+  .hero-link {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: .04em;
+    color: var(--muted);
+    border-bottom: 1px dashed var(--rule);
+    padding-bottom: 2px;
+  }
+  .hero-link:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .hero p {
+    font-size: 17px;
+    max-width: 56ch;
+    color: #262524;
+    margin-bottom: 18px;
+  }
+  .hero .meta {
+    margin-top: 28px;
+    display: flex; gap: 24px; flex-wrap: wrap;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: .06em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .hero .meta span::before { content: "▸ "; color: var(--accent); }
+
+  /* Thesis */
+  .thesis-card {
+    background: var(--paper);
+    padding: 32px 36px;
+    border-left: 3px solid var(--accent);
+  }
+  .thesis-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .thesis-card h3 {
+    font-size: 24px; font-weight: 500; letter-spacing: -0.015em;
+    line-height: 1.25;
+    margin-bottom: 14px;
+    max-width: 32ch;
+  }
+  .thesis-card p { font-size: 15px; color: #2a2a28; max-width: 60ch; }
+  .thesis-card ul {
+    margin-top: 18px;
+    list-style: none;
+    display: flex; gap: 16px 24px; flex-wrap: wrap;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--muted);
+    letter-spacing: .04em;
+  }
+  .thesis-card ul li::before { content: "—"; margin-right: 8px; color: var(--soft); }
+
+  /* Projects */
+  .project-list { display: grid; gap: 0; }
+  .project {
+    display: grid;
+    grid-template-columns: 80px 1fr 160px;
+    gap: 32px;
+    padding: 28px 0;
+    border-top: 1px solid var(--rule);
+    align-items: start;
+    transition: background .2s ease;
+  }
+  .project:hover { background: var(--paper); }
+  .project:hover .project-num { color: var(--accent); }
+  .project:last-child { border-bottom: 1px solid var(--rule); }
+  .project-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px; color: var(--soft);
+    letter-spacing: .04em;
+    padding-top: 4px;
+    transition: color .2s ease;
+  }
+  .project-body h4 {
+    font-size: 18px; font-weight: 500;
+    letter-spacing: -0.005em;
+    margin-bottom: 6px;
+  }
+  .project-body .context {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .project-body p {
+    font-size: 14.5px; color: #2a2a28;
+    max-width: 64ch;
+  }
+  .project-tags {
+    margin-top: 14px;
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: .04em;
+    padding: 3px 8px;
+    border: 1px solid var(--rule);
+    color: var(--muted);
+    background: var(--bg);
+  }
+  .project-side {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--muted);
+    display: flex; flex-direction: column; gap: 10px;
+    padding-top: 4px;
+  }
+  .project-side .year { color: var(--ink); letter-spacing: .04em; }
+  .project-side a {
+    color: var(--accent);
+    border-bottom: 1px dashed var(--accent);
+    padding-bottom: 1px;
+    align-self: flex-start;
+  }
+  .project-side a:hover { background: var(--accent); color: var(--bg); border-bottom: 1px solid var(--accent); }
+
+  /* Contact */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 28px;
+    margin-bottom: 48px;
+  }
+  .contact-cell {
+    border-top: 1px solid var(--ink);
+    padding-top: 14px;
+  }
+  .contact-cell .key {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .contact-cell .val { font-size: 15px; word-break: break-word; }
+
+  .contact-lede {
+    font-size: 16.5px;
+    color: #262524;
+    max-width: 56ch;
+    margin-bottom: 36px;
+  }
+  .cv-block {
+    display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+    margin: 32px 0 0;
+    padding: 20px 24px;
+    background: var(--paper);
+    border-left: 3px solid var(--accent);
+  }
+  .cv-block .cv-text { flex: 1; min-width: 200px; }
+  .cv-block .cv-text strong { font-size: 15px; }
+  .cv-block .cv-text div { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: .04em; margin-top: 4px; }
+  .cv-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--ink); color: var(--bg);
+    padding: 12px 18px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .cv-btn:hover { background: var(--accent); color: var(--bg); }
+
+  /* Form */
+  form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px 28px;
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field.wide { grid-column: 1 / -1; }
+  .field label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .field input, .field textarea {
+    font: inherit; font-size: 15px;
+    color: var(--ink);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--rule);
+    padding: 10px 0;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .field input:focus, .field textarea:focus { border-bottom-color: var(--accent); }
+  .field textarea { resize: vertical; min-height: 80px; }
+  button[type="submit"] {
+    grid-column: 1 / -1;
+    justify-self: start;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    padding: 14px 24px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  button[type="submit"]:hover { background: var(--accent); }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--rule);
+    padding: 28px 0;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .06em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 800px) {
+    .row { grid-template-columns: 1fr; gap: 18px; padding: 40px 0; }
+    .project { grid-template-columns: 32px 1fr; }
+    .project-side { grid-column: 2; }
+    form { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
-
 <body>
+  <header class="topbar">
+    <div class="mark"><span class="sigil"></span><span>PIETRO SAGGIONETTO</span><span style="color:var(--muted)">/ MECH. ENG.</span></div>
+    <nav>
+      <a href="#thesis">Thesis</a>
+      <a href="#projects">Projects</a>
+    </nav>
+  </header>
 
-  <h1>Your Name</h1>
-  <p>Mechanical Engineer | CFD | Turbomachinery | Control Systems</p>
+  <div class="grid">
 
-  <hr>
+    <section class="row hero" id="top">
+      <div class="row-label">00 / Profile</div>
+      <div>
+        <h1>Mechanical engineer <em class="accent-em">graduating in 2026 from Politecnico di Milano.</em></h1>
+        <p>
+          I work at the intersection of structural mechanics, simulation and computational
+          design — from finite-element analysis and topology optimization to digital twins
+          and algorithmic geometry.
+        </p>
+        <p>
+          Currently finishing my Master&rsquo;s thesis on the design and CFD validation of a
+          two-stage low-pressure marine turbine, within the European MARPOWER project.
+        </p>
+        <div class="meta">
+          <span>Milan, Italy</span>
+          <span>Available Spring 2026</span>
+          <span>EN / IT</span>
+        </div>
+        <div class="hero-cta">
+          <a class="cv-btn" href="assets/CV_Pietro_Saggionetto.pdf" download>Download CV ↓</a>
+          <a class="hero-link" href="mailto:pietro.saggio01@gmail.com">pietro.saggio01@gmail.com</a>
+          <a class="hero-link" href="https://linkedin.com/in/pietro-saggionetto" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </div>
+    </section>
 
-  <h2>Master’s Thesis</h2>
-  <p>
-    Design and CFD validation of a two-stage low-pressure marine turbine (MARPOWER Project).
-  </p>
-  <a href="cv.pdf" target="_blank">Download CV</a>
+    <section class="row" id="thesis">
+      <div class="row-label">01 / Thesis</div>
+      <div class="thesis-card">
+        <div class="thesis-tag">In progress · MARPOWER (EU)</div>
+        <h3>Design and CFD Validation of a Two-Stage Low-Pressure Marine Turbine</h3>
+        <p>
+          End-to-end development of a marine turbine: from meanline design through full
+          3D geometry generation, with aerodynamic validation performed in ANSYS CFX.
+        </p>
+        <ul>
+          <li>Turbomachinery</li>
+          <li>ANSYS CFX</li>
+          <li>3D blade design</li>
+          <li>CFD validation</li>
+        </ul>
+      </div>
+    </section>
 
-  <hr>
+    <section class="row" id="projects">
+      <div class="row-label">02 / Projects</div>
+      <div class="project-list">
 
-  <h2>Selected Projects</h2>
+        <article class="project">
+          <div class="project-num">P.01</div>
+          <div class="project-body">
+            <h4>Voronoi-based Morphing Wing</h4>
+            <div class="context">Methods for Complex Shape Generation · Politecnico di Milano</div>
+            <p>
+              Algorithmic design of a compliant camber-morphing wing rib based on a
+              Voronoi architecture. A genetic algorithm optimizes the control points
+              so the rib deforms into a target NACA camber under actuator load.
+              FEM beam model plus a parametric Grasshopper script for prototyping.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Grasshopper</span><span class="tag">Genetic algorithm</span><span class="tag">FEM</span><span class="tag">Compliant mech.</span>
+            </div>
+          </div>
+          <div class="project-side">
+            <div class="year">2025</div>
+            <a href="assets/reports/voronoi-morphing-wing.pdf" target="_blank" rel="noopener">Report ↗</a>
+          </div>
+        </article>
 
-  <h3>CFD Multi-Rotating Mesh System (OpenFOAM)</h3>
-  <p>
-    Simulation of multiple rotating zones with dynamic mesh and CFD validation.
-  </p>
+        <article class="project">
+          <div class="project-num">P.02</div>
+          <div class="project-body">
+            <h4>Hub-Carrier Topology Optimization</h4>
+            <div class="context">Topology Optimization · Shell Eco-marathon Asteria²</div>
+            <p>
+              Stiffness-to-weight optimization of the front hub carrier of the
+              Politecnico di Milano Shell Eco-marathon vehicle. Six load cases,
+              draw + extrusion manufacturing constraints, Altair OptiStruct on an
+              aluminium 6061-T6 design domain.
+            </p>
+            <div class="project-tags">
+              <span class="tag">OptiStruct</span><span class="tag">Topology</span><span class="tag">Lightweighting</span><span class="tag">Al 6061-T6</span>
+            </div>
+          </div>
+          <div class="project-side">
+            <div class="year">2024</div>
+            <a href="assets/reports/topology-optimization-hub-carrier.pdf" target="_blank" rel="noopener">Report ↗</a>
+          </div>
+        </article>
 
-  <h3>Reinforcement Learning AMS System (MATLAB)</h3>
-  <p>
-    Development of a custom RL environment for automated material handling.
-  </p>
+        <article class="project">
+          <div class="project-num">P.03</div>
+          <div class="project-body">
+            <h4>Digital Twin — Triplex Reciprocating Pump</h4>
+            <div class="context">Digital Twin for Health and Usage Monitoring</div>
+            <p>
+              Full diagnosis pipeline on a Simulink/Simscape model of a triplex pump:
+              anomaly detection via Mahalanobis distance, fault classification with
+              neural networks, Bayesian model updating with MCMC Metropolis–Hastings
+              and surrogate modeling.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Simulink</span><span class="tag">MATLAB</span><span class="tag">ANN</span><span class="tag">MCMC-MH</span><span class="tag">Surrogate models</span>
+            </div>
+          </div>
+          <div class="project-side">
+            <div class="year">2024</div>
+            <a href="assets/reports/digital-twin-triplex-pump.pdf" target="_blank" rel="noopener">Report ↗</a>
+          </div>
+        </article>
 
-  <h3>Formula Student Powertrain</h3>
-  <p>
-    Carbon fiber fuel tank, exhaust system design, ECU calibration.
-  </p>
+        <article class="project">
+          <div class="project-num">P.04</div>
+          <div class="project-body">
+            <h4>Soft Pneumatic Actuator — Hyperelastic FEM</h4>
+            <div class="context">Mechanical Behaviour of Materials &amp; FE Simulation</div>
+            <p>
+              FE simulation of a unidirectional soft pneumatic actuator modelled as an
+              almost-incompressible polynomial hyperelastic solid (N=2). Large strain
+              contact problem; comparison of element formulations with explicit
+              attention to shear and volumetric locking.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Abaqus</span><span class="tag">Hyperelasticity</span><span class="tag">Nonlinear FEM</span><span class="tag">Contact</span>
+            </div>
+          </div>
+          <div class="project-side">
+            <div class="year">2024</div>
+            <a href="assets/reports/soft-pneumatic-actuator.pdf" target="_blank" rel="noopener">Report ↗</a>
+          </div>
+        </article>
 
-  <hr>
+        <article class="project">
+          <div class="project-num">P.05</div>
+          <div class="project-body">
+            <h4>Turbomachinery — Coursework Project</h4>
+            <div class="context">Turbomachinery A · Politecnico di Milano</div>
+            <p>
+              Aerodynamic design and analysis project from the Turbomachinery A course,
+              preparatory to the thesis work on the MARPOWER marine turbine.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Turbomachinery</span><span class="tag">Aerodynamic design</span><span class="tag">Blade design</span>
+            </div>
+          </div>
+          <div class="project-side">
+            <div class="year">2024</div>
+            <a href="assets/reports/turbomachinery-project.pptx" target="_blank" rel="noopener">Slides ↗</a>
+          </div>
+        </article>
 
-  <h2>Contact</h2>
-  <p>Email: your.email@example.com</p>
+      </div>
+    </section>
 
+    <footer>
+      <div>© 2026 Pietro Saggionetto</div>
+      <div>Politecnico di Milano</div>
+    </footer>
+
+  </div>
 </body>
 </html>
